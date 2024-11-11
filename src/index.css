@@ -115,3 +115,45 @@ blockquote span{
   font-weight: bold;
   margin-top:0.9em;
 }
+
+
+
+
+.relaxation-card {
+  max-width: 400px;
+  height: max-content;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f0f8ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.relaxation-card h2 {
+  font-family: 'Serif', sans-serif;
+  color: #2d6a4f;
+  margin-bottom: 10px;
+}
+
+.relaxation-card p {
+  color: #606c76;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.video-container iframe {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.creator-name {
+  font-size: 14px;
+  color: #2d6a4f;
+  margin-top: 10px;
+}
+
+.creator-name a {
+  color: #2d6a4f;
+  text-decoration: underline;
+}

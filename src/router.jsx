@@ -3,6 +3,7 @@ import App from "./App";
 import Goals from "./pages/Goals";
 import Feelings from "./pages/Feelings";
 import FeelingDetail from "./pages/FeelingDetail";
+import Relaxation from "./pages/Relaxation";
 
 const router = createBrowserRouter(
   [
@@ -21,6 +22,10 @@ const router = createBrowserRouter(
     {
       path: "feelings/:id",
       element: <FeelingDetail />,
+    },
+    {
+      path: "relaxation-corner",
+      element: <Relaxation />,
     },
   ]
 );

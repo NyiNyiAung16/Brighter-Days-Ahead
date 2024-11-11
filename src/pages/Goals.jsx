@@ -1,7 +1,7 @@
 import SetGoal from "../components/SetGoal";
-import Header from '../components/Header'
 import GoalLists from "../components/GoalLists";
 import { useState } from "react";
+import DefaultLayout from "../layouts/default";
 
 export default function Goals() {
     const [goals,setGoals] = useState([
@@ -15,12 +15,11 @@ export default function Goals() {
     ])
 
     return (
-        <div className="min-h-screen">
-            <Header/>
+        <DefaultLayout>
             <div className="max-w-sm md:max-w-lg mx-5 md:mx-auto space-y-5">
                 <SetGoal setGoals={setGoals}/>
                 <GoalLists goals={goals} setGoals={setGoals}/>
             </div>
-        </div>
+        </DefaultLayout>
     )
 }

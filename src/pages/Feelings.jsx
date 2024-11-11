@@ -1,7 +1,7 @@
-import Header from "../components/Header";
 import FeelingForm from "../components/Form";
 import FeelingLists from "../components/FeelingLists";
 import { useState } from "react";
+import DefaultLayout from "../layouts/default";
 
 export default function Feelings() {
   const [feelings, setFeelings] = useState([
@@ -17,10 +17,9 @@ export default function Feelings() {
   }
 
   return (
-    <div className="min-h-screen">
-      <Header />
-      <FeelingForm onHandleSubmit={onHandleSubmit} title="Add Feeling" placeholder="What are you feeling today?" />
-      <FeelingLists feelings={feelings} />
-    </div>
+    <DefaultLayout>
+        <FeelingForm onHandleSubmit={onHandleSubmit} title="Add Feeling" placeholder="What are you feeling today?" />
+        <FeelingLists feelings={feelings} />
+    </DefaultLayout>
   );
 }
