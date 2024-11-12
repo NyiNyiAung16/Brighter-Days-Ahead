@@ -4,6 +4,7 @@ import Goals from "./pages/Goals";
 import Feelings from "./pages/Feelings";
 import FeelingDetail from "./pages/FeelingDetail";
 import Relaxation from "./pages/Relaxation";
+import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter(
   [
@@ -27,6 +28,10 @@ const router = createBrowserRouter(
       path: "relaxation-corner",
       element: <Relaxation />,
     },
+    {
+      path: "admin/dashboard",
+      element: <Dashboard/>
+    }
   ]
 );
 

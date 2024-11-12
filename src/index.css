@@ -1,6 +1,8 @@
 /* Background Gradient */
 body {
   background: linear-gradient(135deg, #ffe4a1, #a5d8f3);
+  background-repeat: no-repeat;
+  background-size: cover;
   font-family: "Arial", sans-serif;
   color: #333;
   margin: 0;
