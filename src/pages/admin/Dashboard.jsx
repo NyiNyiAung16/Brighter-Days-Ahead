@@ -1,5 +1,5 @@
-import BaseTable from "../components/BaseTable";
-import AdminLayout from "../layouts/adminLayout";
+import BaseTable from "../../components/BaseTable";
+import AdminLayout from "../../layouts/adminLayout";
 
 export default function Dashboard() {
   return (

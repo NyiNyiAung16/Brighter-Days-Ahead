@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import Logo from "../components/Logo";
 
 function MobileHeaderLinks() {
   return (
@@ -144,16 +145,6 @@ function ProfileDropdown() {
   );
 }
 
-function Logo() {
-  return (
-    <img
-      className="h-8 w-8"
-      src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-      alt="Your Company"
-    />
-  );
-}
-
 export default function AdminLayout({ children }) {
   return (
     <div className="min-h-screen">
@@ -162,7 +153,7 @@ export default function AdminLayout({ children }) {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="shrink-0">
-                <Logo />
+                <Logo className="w-32"/>
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">

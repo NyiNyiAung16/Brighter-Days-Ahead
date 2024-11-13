@@ -4,7 +4,10 @@ import Goals from "./pages/Goals";
 import Feelings from "./pages/Feelings";
 import FeelingDetail from "./pages/FeelingDetail";
 import Relaxation from "./pages/Relaxation";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/admin/Dashboard";
+import AdminFeelings from "./pages/admin/Feelings";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const router = createBrowserRouter(
   [
@@ -29,8 +32,12 @@ const router = createBrowserRouter(
       element: <Relaxation />,
     },
     {
-      path: "admin/dashboard",
-      element: <Dashboard/>
+      path: 'login',
+      element: <Login/>
+    },
+    {
+      path: 'register',
+      element: <Register/>
     }
   ]
 );
