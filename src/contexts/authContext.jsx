@@ -1,6 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../firebaseConfig";
+import { fetchAuthUser } from "../helpers/auth";
 
 
 const AuthContext = createContext();
@@ -11,13 +12,13 @@ const AuthContextProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        onAuthStateChanged(auth,initializeUser);
+        onAuthStateChanged(auth, initializeUser);
     }, []);
 
 
     const initializeUser = (user) => {
         if(user) {
-            setCurrentUser({...user});
+            fetchAuthUser(user.uid).then((data) => setCurrentUser({ ...user, ...data }));
             setUserLoggedIn(true);
             setIsLoading(false);
         } else {

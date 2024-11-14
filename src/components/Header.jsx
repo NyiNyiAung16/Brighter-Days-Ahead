@@ -30,7 +30,6 @@ function HeaderLinks() {
 
 export default function Header() {
   const { userLoggedIn } = useAuth();
-  
   const navigate = useNavigate();
 
   const handleLogout = async () => {

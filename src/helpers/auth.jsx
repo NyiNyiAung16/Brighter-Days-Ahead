@@ -18,7 +18,7 @@ const register = async ({ username, email, password, role }) => {
         await createUserWithEmailAndPassword(auth,email,password);
         const user = auth.currentUser;
         if(user) {
-            await setDoc(doc(db,'users',user.uid),{ username, email, password, role });
+            await setDoc(doc(db,'users',user.uid),{ username, email, role });
         }
     } catch (error) {
         console.log(error)
@@ -36,11 +36,13 @@ const logout = async () => {
 }
 
 
-const fetchAuthUser = async (id) => {
+const fetchAuthUser = async (uid) => {
     try {
-        const docRef = doc(db,'users',id);
-        const user = await getDoc(docRef);
-        return user;
+        const docRef = doc(db,'users',uid);
+        const userSnap = await getDoc(docRef);
+        if(userSnap.exists()) {
+            return userSnap.data();
+        }
     } catch (error) {
         console.log(error)
     }
