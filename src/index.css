@@ -1,6 +1,7 @@
 /* Background Gradient */
 body {
   background: linear-gradient(135deg, #ffe4a1, #a5d8f3);
+  background-repeat: no-repeat;
   font-family: "Arial", sans-serif;
   color: #333;
   margin: 0;
@@ -22,17 +23,6 @@ body {
   pointer-events: none;
 } */
 
-/* Container for Content */
-.container {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
 
 /* Headings and Text Styling */
 h1 {
@@ -81,7 +71,7 @@ p {
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic);
 
 blockquote{
-  font-size: 1.3em;
+  font-size: 1.2em;
   width:100%;
   margin:50px auto;
   font-family:Open Sans;
@@ -98,7 +88,7 @@ blockquote::before{
   font-family:Arial;
   content: "\201C";
   color:#78C0A8;
-  font-size:4em;
+  font-size:3.2em;
   position: absolute;
   left: 10px;
   top:-10px;
@@ -114,4 +104,46 @@ blockquote span{
   font-style: normal;
   font-weight: bold;
   margin-top:0.9em;
+}
+
+
+
+
+.relaxation-card {
+  max-width: 400px;
+  height: max-content;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f0f8ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.relaxation-card h2 {
+  font-family: 'Serif', sans-serif;
+  color: #2d6a4f;
+  margin-bottom: 10px;
+}
+
+.relaxation-card p {
+  color: #606c76;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.video-container iframe {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.creator-name {
+  font-size: 14px;
+  color: #2d6a4f;
+  margin-top: 10px;
+}
+
+.creator-name a {
+  color: #2d6a4f;
+  text-decoration: underline;
 }

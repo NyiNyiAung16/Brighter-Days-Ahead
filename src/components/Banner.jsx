@@ -16,7 +16,7 @@ export default function Banner() {
           <p className="mb-5 text-gray-300">
           Each day is a new step toward recovery, filled with hope, strength, and the love of those who believe in you. Here’s to finding light and joy in every moment as you move forward on this journey.
           </p>
-          <button className="btn btn-outline btn-info">Get Started</button>
+          {/* <button className="btn btn-outline btn-info">Get Started</button> */}
         </div>
       </div>
 
