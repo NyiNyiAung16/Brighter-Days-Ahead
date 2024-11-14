@@ -10,6 +10,7 @@ export default function TellFeelingForm() {
   const [errors, setErrors] = useState(null);
 
   const { currentUser } = useAuth();
+  console.log(currentUser)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
