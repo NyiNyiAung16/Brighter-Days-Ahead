@@ -1,8 +1,10 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
-import TellFeelingFormModal from "../components/BaseModal";
-import UploadMemoriesModal from "../components/BaseModal";
-import RelaxationModal from "../components/BaseModal";
+import { logout } from "../helpers/auth";
+import useAuth from '../helpers/useAuth'
+import TellFeelingForm from "./TellFeelingForm";
+import UploadMemories from "./UploadMemories";
+import RelaxationForm from "./RelaxationForm";
 
 function HeaderLinks() {
   return (
@@ -19,11 +21,24 @@ function HeaderLinks() {
       <li>
         <NavLink to="/relaxation-corner">Relaxation</NavLink>
       </li>
+      <li>
+        <NavLink to="/memories">Memories</NavLink>
+      </li>
     </>
   );
 }
 
 export default function Header() {
+  const { userLoggedIn } = useAuth();
+  
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    console.log('hit')
+    await logout();
+    navigate('/login', { replace: true });
+  }
+
   return (
     <div className="navbar">
       <div className="navbar-start">
@@ -61,12 +76,12 @@ export default function Header() {
         </ul>
       </div>
       <div className="navbar-end">
-        {/* <a className="btn btn-outline btn-info">Login</a> */}
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-outline btn-info m-1">
+        {!userLoggedIn && <Link to="/login" className="btn btn-outline btn-info">Login</Link>}
+        { userLoggedIn && <details className="dropdown dropdown-end">
+          <summary className="btn btn-outline btn-info m-1">
             Nyi Nyi Aung
-          </label>
-          <ul className="menu dropdown-content menu-compact bg-base-100 rounded-box z-[1] p-2 w-52 shadow">
+          </summary>
+          <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] p-2 w-52 shadow">
             <li>
               <a className="px-3 py-2" href="#" onClick={() => document.getElementById("tellFeelingModal").showModal()}>Tell Feeling</a>
             </li>
@@ -76,11 +91,11 @@ export default function Header() {
             <li>
               <a className="px-3 py-2" href="#" onClick={() => document.getElementById("relaxationModal").showModal()}>Set Relaxation</a>
             </li>
-            <li>
+            <li onClick={handleLogout}>
               <a className="px-3 py-2">Logout</a>
             </li>
           </ul>
-        </div>
+        </details>}
       </div>
       <Modals/>
     </div>
@@ -94,34 +109,9 @@ export default function Header() {
 function Modals() {
   return (
     <>
-      <TellFeelingFormModal id="tellFeelingModal" title="Tell Feeling">
-        <form>
-          <textarea className="w-full textarea text-white resize-none h-[150px] border-gray-200"></textarea>
-          <button className="btn btn-outline btn-sm " type="submit">
-            Submit
-          </button>
-        </form>
-      </TellFeelingFormModal>
-      
-      <UploadMemoriesModal id="uploadMemoriesModal" title="Upload Memories">
-        <form className="space-y-2">
-            <input type="file" className="file-input w-full"/>
-            <button className="btn btn-outline btn-sm " type="submit">
-              Upload
-            </button>
-        </form>
-      </UploadMemoriesModal>
-
-
-      <RelaxationModal id="relaxationModal" title="Sugget Relaxation Video">
-        <form className="space-y-2"> 
-            <textarea className="w-full textarea textarea-bordered text-gray-100 resize-none h-[100px]" placeholder="tell your feeling"></textarea>
-            <input type="text" className="w-full input input-bordered text-gray-100" placeholder="youtube link"/>
-            <button className="btn btn-outline btn-sm " type="submit">
-              Submit
-            </button>
-        </form>
-      </RelaxationModal>
+      <TellFeelingForm/>
+      <UploadMemories/>
+      <RelaxationForm/>
     </>
   )
 }

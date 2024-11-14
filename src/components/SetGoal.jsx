@@ -1,14 +1,29 @@
 import { useState } from "react";
+import { goalValidation } from "../helpers/validation";
+import { setGoal } from "../helpers/goals";
 
-export default function SetGoal({ setGoals }) {
+export default function SetGoal() {
     const [body,setBody] = useState('');
+    const [completed, setCompleted] = useState(false);
+    const [error, setError] = useState(null);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!body.trim() && Number(body.trim().length) === 0) return;
+        const { errors, data } = goalValidation({ body, completed });
+        
+        if(errors) {
+          setError(errors);
+          setTimeout(() => {
+            setError(null);
+          }, 2000);
+        } else {
+          console.log(data);
+          await setGoal({ body, completed });
+          setBody("");
+          setCompleted(false);
+        }
 
-        setGoals((goal) => [{ body, completed: false }, ...goal]);
-        setBody("");
+
     }
 
   return (
@@ -16,7 +31,7 @@ export default function SetGoal({ setGoals }) {
       <input
         type="text"
         placeholder="Set Goal here"
-        className="input input-bordered input-info bg-gray-100 bg-opacity-10 w-full"
+        className={`input input-bordered input-info bg-gray-100 bg-opacity-10 w-full ${error?.body && "input-error border-2"}`}
         value={body}
         onInput={(e) => setBody(e.target.value)}
       />

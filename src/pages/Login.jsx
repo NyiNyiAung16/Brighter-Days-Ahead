@@ -1,9 +1,49 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Logo from "../components/Logo";
+import { useState } from "react";
+import { loginValidation } from "../helpers/validation";
+import { login } from "../helpers/auth";
+import useAuth from '../helpers/useAuth'
+import Spinner from "../components/Spinner";
 
 export default function Login() {
+  let [email, setEmail] = useState('');
+  let [password, setPassword] = useState('');
+  let [errors, setErrors] = useState(null);
+  let [isLoading, setIsLoading] = useState(false);
+
+
+  const { userLoggedIn} = useAuth();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setIsLoading(true);
+    const { errors, data } = loginValidation({ email, password });
+    
+    if(errors) {
+      setErrors(errors);
+      setTimeout(() => setErrors(null),2000);
+    } else {
+      await login(data);
+      resetForm();
+    }
+
+    setIsLoading(false);
+  }
+
+
+  const resetForm = ( ) => {
+    setEmail('');
+    setPassword('');
+    setErrors(null);
+  }
+
+
   return (
     <>
+      {userLoggedIn && <Navigate to="/" replace={true} />}
+      
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Logo className="w-52 mx-auto" />
@@ -13,7 +53,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
               <label className="input input-bordered flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -28,8 +68,11 @@ export default function Login() {
                   type="text"
                   className="grow text-gray-200"
                   placeholder="Email Address"
+                  value={email}
+                  onInput={(e) => setEmail(e.target.value)}
                 />
               </label>
+              { errors?.email && <span className="text-sm text-red-500">{errors.email.message}</span>}
 
               <label className="input input-bordered flex items-center gap-2">
                 <svg
@@ -48,15 +91,18 @@ export default function Login() {
                   type="password"
                   className="grow text-gray-200"
                   placeholder="Password"
+                  value={password}
+                  onInput={(e) => setPassword(e.target.value)}
                 />
               </label>
+              { errors?.password && <span className="text-sm text-red-500">{errors.password.message}</span>}
 
             <div>
               <button
                 type="submit"
                 className="w-full btn btn-primary"
               >
-                Sign in
+                { isLoading ? <Spinner/> : "Sign in" }
               </button>
             </div>
           </form>

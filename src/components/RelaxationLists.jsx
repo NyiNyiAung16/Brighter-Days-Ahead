@@ -5,7 +5,7 @@ export default function RelaxationLists({ relaxations }) {
     <div className="grid grid-cols-4 gap-5 px-10">
       {relaxations &&
         relaxations.map((relaxation) => (
-          <>
+          <div key={relaxation.id}>
             <div className="relaxation-card">
               <h2>Relaxation Corner</h2>
               <p>{ relaxation.message }</p>
@@ -17,7 +17,7 @@ export default function RelaxationLists({ relaxations }) {
                   src={`https://www.youtube.com/embed/${relaxation.videoId}`}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
-                  allowfullscreen
+                  allowFullScreen={true}
                 ></iframe>
               </div>
 
@@ -31,7 +31,7 @@ export default function RelaxationLists({ relaxations }) {
                 </a>
               </p>
             </div>
-          </>
+          </div>
         ))}
     </div>
   );
