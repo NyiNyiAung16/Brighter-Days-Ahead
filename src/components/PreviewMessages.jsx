@@ -23,7 +23,7 @@ export default function PreviewMessages() {
 
   return (
     <div className="p-10">
-        <h1 className="text-5xl font-bold text-center">Short Quotes</h1>
+        <h1 className="title">Short Quotes</h1>
         <div className="mt-10 grid grid-cols-2 items-end gap-6">
         {messages.map((message, i) => (
             <Message message={message} key={i} />
