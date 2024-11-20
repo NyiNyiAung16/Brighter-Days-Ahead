@@ -3,9 +3,11 @@ import GoalLists from "../components/GoalLists";
 import DefaultLayout from "../layouts/default";
 import Spinner from "../components/Spinner";
 import useGoal from "../helpers/useGoal";
+import { setTitle } from "../helpers/setTitle";
 
 export default function Goals() {
   const goalContext = useGoal();
+  setTitle("Goals");
 
   return (
     <DefaultLayout>

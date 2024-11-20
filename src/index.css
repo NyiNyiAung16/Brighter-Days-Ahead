@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Open-Sans";
+  /* src: url('../src/assets/fonts/OpenSans-regular.ttf'); */
+  src: url('../src/assets/fonts/OpenSans-Italic-VariableFont.ttf');
+  font-weight: 400;
+}
+
 /* Background Gradient */
 body {
   background: linear-gradient(135deg, #ffe4a1, #a5d8f3);
@@ -8,50 +15,47 @@ body {
   padding: 0;
 }
 
-
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic);
-
-blockquote{
+blockquote {
   font-size: 1.2em;
-  max-width:100%;
+  max-width: 100%;
   height: max-content;
-  margin:50px auto;
-  font-family:Open Sans;
-  font-style:italic;
+  margin: 50px auto;
   color: #555555;
-  padding:1.2em 30px 1.2em 75px;
-  border-left:8px solid #78C0A8 ;
-  line-height:1.6;
+  font-style: italic;
+  padding: 1.2em 30px 1.2em 75px;
+  border-left: 8px solid #78c0a8;
+  line-height: 1.6;
   position: relative;
-  background:#EDEDED;
+  background: #ededed;
   overflow: hidden;
   border-radius: 3px;
 }
 
-blockquote::before{
-  font-family:Arial;
+blockquote::before {
+  font-family: Arial;
   content: "\201C";
-  color:#78C0A8;
-  font-size:3.2em;
+  color: #78c0a8;
+  font-size: 3.2em;
   position: absolute;
   left: 10px;
-  top:-10px;
+  top: -10px;
 }
 
-blockquote::after{
-  content: '';
+blockquote::after {
+  content: "";
 }
 
-blockquote span{
-  display:block;
-  color:#333333;
+blockquote p {
+  font-family: 'Open-Sans';
+}
+
+blockquote span {
+  display: block;
+  color: #333333;
   font-style: normal;
   font-weight: bold;
-  margin-top:0.9em;
+  margin-top: 0.9em;
 }
-
-
-
 
 .relaxation-card {
   max-width: 400px;
@@ -65,7 +69,7 @@ blockquote span{
 }
 
 .relaxation-card h2 {
-  font-family: 'Serif', sans-serif;
+  font-family: "Serif", sans-serif;
   color: #2d6a4f;
   margin-bottom: 10px;
 }

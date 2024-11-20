@@ -2,6 +2,7 @@ import FeelingLists from "../components/FeelingLists";
 import DefaultLayout from "../layouts/default";
 import Spinner from "../components/Spinner";
 import useFeeling from "../helpers/useFeeling";
+import { setTitle } from "../helpers/setTitle";
 // import { useSearchParams } from "react-router-dom";
 
 export default function Feelings() {
@@ -10,6 +11,7 @@ export default function Feelings() {
   // const [pages, setPages] = useState([]);
 
   const feelingContext = useFeeling();
+  setTitle('Feelings');
 
 
   return (

@@ -10,6 +10,8 @@ import { getPhotos } from "./helpers/gallery";
 import { getRelaxation } from "./helpers/relaxation";
 import { getFeelings } from "./helpers/feelings";
 import Spinner from "./components/Spinner";
+import { setTitle } from "./helpers/setTitle";
+
 
 function App() {
   const [relaxations, setRelaxations] = useState([]);
@@ -18,6 +20,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setTitle("Home");
     const fetch = async () => {
       setIsLoading(true);
 

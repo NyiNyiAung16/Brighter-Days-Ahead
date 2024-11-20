@@ -5,6 +5,9 @@ import { registerValidation } from "../helpers/validation";
 import { register } from "../helpers/auth";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
+import { setTitle } from "../helpers/setTitle";
+import EyesOpenIcon from "../components/EyesOpenIcon";
+import EyesCloseIcon from "../components/EyesCloseIcon";
 
 export default function Register() {
   let [email, setEmail] = useState("");
@@ -13,6 +16,9 @@ export default function Register() {
   let [role, setRole] = useState("");
   let [errors, setErrors] = useState(null);
   let [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  setTitle('Register');
 
   const handleSubmit = async (e) => {
     try {
@@ -117,7 +123,7 @@ export default function Register() {
               </span>
             )}
 
-            <label className="input input-bordered flex items-center gap-2">
+            <label className="input input-bordered flex items-center gap-2 relative group ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
@@ -131,12 +137,16 @@ export default function Register() {
                 />
               </svg>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="grow text-gray-200"
                 placeholder="Password"
                 value={password}
                 onInput={(e) => setPassword(e.target.value)}
               />
+              <div className="hidden absolute top-2.5 right-2 group-hover:cursor-pointer group-hover:block">
+                { !showPassword && <EyesOpenIcon onClick={() => setShowPassword(true)}/>}
+                { showPassword && <EyesCloseIcon onClick={() => setShowPassword(false)}/>}
+              </div>
             </label>
             {errors?.password && (
               <span className="text-sm text-red-500">
@@ -149,6 +159,7 @@ export default function Register() {
               value={role}
               onChange={(e) => setRole(e.target.value)}
             >
+              
               <option value="" disabled>
                 Choose a role
               </option>

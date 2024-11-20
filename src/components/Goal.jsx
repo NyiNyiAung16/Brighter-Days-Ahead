@@ -4,6 +4,8 @@ import { deleteGoal, updateGoal } from "../helpers/goals";
 import useGoal from "../helpers/useGoal";
 import { toast } from "react-toastify";
 import { useAuth } from "../helpers/useAuth";
+import DotsIcon from "./DotsIcon";
+import EditIcon from "./EditIcon";
 
 export default function Goal({ goal }) {
   const [showUpdate, setShowUpdate] = useState(false);
@@ -94,12 +96,22 @@ export default function Goal({ goal }) {
             {goal.body}
           </p>
           {goal.user.id === userId && (
-            <TrashIcon
-              className={
-                "hidden absolute top-0 right-4 cursor-pointer hover:scale-105 duration-100 group-hover:block"
-              }
-              onClick={handleTrash}
-            />
+            <div className="dropdown dropdown-top hidden absolute top-0 right-4 cursor-pointer hover:scale-105 duration-100 group-hover:block">
+              <div tabIndex={0} role="button">
+                <DotsIcon />
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content w-max rounded-box z-[1] p-2 shadow"
+              >
+                <li className="p-1">
+                  <EditIcon onClick={() => setShowUpdate(true)}  className="hover:scale-105 duration-150" />
+                </li>
+                <li className="p-1">
+                  <TrashIcon onClick={handleTrash} className="hover:scale-105 duration-150" />
+                </li>
+              </ul>
+            </div>
           )}
         </div>
       )}

@@ -7,6 +7,7 @@ import CommentLists from "../components/CommentLists";
 import { getFeeling } from "../helpers/feelings";
 import Spinner from "../components/Spinner";
 import { CommentProvider } from "../contexts/commentContext";
+import { setTitle } from "../helpers/setTitle";
 
 export default function FeelingDetail() {
   const [feeling, setFeeling] = useState(null);
@@ -15,6 +16,7 @@ export default function FeelingDetail() {
   const params = useParams();
 
   useEffect(() => {
+    setTitle('Feeling Details');
     const fetch = async () => {
       setIsLoading(true);
       let feelingData = await getFeeling(params.id);

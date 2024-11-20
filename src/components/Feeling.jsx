@@ -11,7 +11,7 @@ export default function Feeling({ feeling, handleDelete, handleEdit }) {
     return (
         <div className="relative group">
             {feeling && <Link to={`/feelings/${feeling.id}`}>
-                <blockquote className="">
+                <blockquote>
                     {params.id ? <p>{feeling.text}</p> : <p>{feeling.text?.substring(0, 100) + '...'}</p>}
                     <span>{feeling.user?.name}</span>
                 </blockquote>

@@ -5,12 +5,15 @@ import { loginValidation } from "../helpers/validation";
 import { login } from "../helpers/auth";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
+import { setTitle } from "../helpers/setTitle";
 
 export default function Login() {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [errors, setErrors] = useState(null);
   let [isLoading, setIsLoading] = useState(false);
+
+  setTitle('Login');
 
   const handleSubmit = async (e) => {
     try {
