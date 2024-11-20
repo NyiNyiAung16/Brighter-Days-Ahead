@@ -1,24 +1,27 @@
 import { useState } from "react";
 import Photo from "./Photo";
+import { useMatch } from "react-router-dom";
 
-export default function GalleryLists({ gallery, showPagination }) {
-  const [photoUrl, setPhotoUrl] = useState('');
+export default function GalleryLists({ gallery }) {
+  const [photoDetail, setPhotoDetail] = useState("");
 
-  const showPhotoModal = (url) => {
+  const match = useMatch("/memories");
+
+  const showPhotoModal = (photo) => {
     document.getElementById("galleryModal").showModal();
-    setPhotoUrl(url);
-  }
+    setPhotoDetail({ url: photo.url, publishedUserName: photo.user.name });
+  };
 
   return (
     <div className="p-10">
-      <h1 className="title">Memories</h1>
+      {!match && <h1 className="title">Memories</h1>}
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {gallery.map((photo, i) => (
+        {gallery.map((photo) => (
           <div
-            key={i}
-            className="relative overflow-hidden rounded-lg shadow-md group"
+            key={photo.id}
+            className="relative overflow-hidden rounded-lg shadow-md group "
           >
-            <Photo url={photo} />
+            <Photo url={photo.url} />
             <div
               className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
               onClick={() => showPhotoModal(photo)}
@@ -26,7 +29,7 @@ export default function GalleryLists({ gallery, showPagination }) {
               <span className="text-white font-bold">View Photo</span>
             </div>
 
-            <PhotoModal photoUrl={photoUrl}/>
+            <PhotoModal photo={photoDetail} />
           </div>
         ))}
       </div>
@@ -34,11 +37,14 @@ export default function GalleryLists({ gallery, showPagination }) {
   );
 }
 
-function PhotoModal({ photoUrl }) {
+function PhotoModal({ photo }) {
   return (
-    <dialog id="galleryModal" className="modal">
+    <dialog id="galleryModal" className="modal modal-bottom sm:modal-middle ">
       <div className="modal-box p-4 bg-gray-50 bg-opacity-80">
-        <Photo url={photoUrl} />
+        <Photo url={photo.url} />
+        <p>
+          Published by: <strong>{photo.publishedUserName}</strong>
+        </p>
       </div>
 
       <form method="dialog" className="modal-backdrop">

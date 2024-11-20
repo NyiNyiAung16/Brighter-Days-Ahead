@@ -1,30 +1,46 @@
-import { collection, doc } from "firebase/firestore"
+import { collection, doc, orderBy, query, where } from "firebase/firestore"
 import { db } from "../firebaseConfig"
-import { get, add, update, destroy } from './firestore'
+import { getAll, add, update, destroy } from './firestore'
 
 
 const goalsCollection = collection(db,'goals');
 
 
 const getGoals = async () => {
-    await get(goalsCollection);
+    try {
+        return await getAll(goalsCollection);
+    } catch (error) {
+       throw new Error(error?.message || "server error");
+    }
 }
 
 
 const setGoal = async ( goal ) => {
-    await add(goal,goalsCollection);
+    try {
+        return await add(goal,goalsCollection);
+    } catch (error) {
+       throw new Error(error?.message || "server error");
+    }
 }
 
 
-const updateGoal = async ( id ) => {
-    const docRef = doc(db,'goals',id);
-    await update(id,docRef);
+const updateGoal = async ( id, data ) => {
+    try {
+        const docRef = doc(db,'goals',id);
+        return await update(docRef,data);
+    } catch (error) {
+       throw new Error(error?.message || "server error");
+    }
 }
 
 
 const deleteGoal = async (id) => {
-    const docRef = doc(db,'goals',id);
-    await destroy(id,docRef);
+    try {
+        const docRef = doc(db,'goals',id);
+        return await destroy(docRef);
+    } catch (error) {
+       throw new Error(error?.message || "server error");
+    }
 }
 
 

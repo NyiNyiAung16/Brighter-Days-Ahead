@@ -1,25 +1,16 @@
-import { useState } from "react";
 import GalleryLists from "../components/GalleryLists";
 import Header from "../components/Header";
+import Spinner from "../components/Spinner";
+import useGallery from "../helpers/useGallery";
 
 export default function Gallery() {
-    const [gallery] = useState([
-        "/boat.avif",
-        "/boat.avif",
-        "/boat.avif",
-        "/boat.avif",
-        "/boat.avif",
-        "/sunset.avif",
-        "/sunset.avif",
-        "/sunset.avif",
-        "/sunset.avif",
-        "/sunset.avif",
-      ]);
+  const galleryContext = useGallery();
 
-    return (
-        <div className="min-h-screen">
-            <Header/>
-            <GalleryLists gallery={gallery}/>
-        </div>
-    )
+  return (
+    <div className="min-h-screen">
+      <Header />
+      {galleryContext?.isLoading && <Spinner className="block mx-auto" />}
+      {!galleryContext?.isLoading && <GalleryLists gallery={galleryContext?.gallery} />}
+    </div>
+  );
 }

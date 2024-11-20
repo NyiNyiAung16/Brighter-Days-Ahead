@@ -7,7 +7,7 @@ const registerSchema = z.object({
     .string()
     .trim()
     .min(7, { message: "Password must be at least 7 characters." }),
-  role: z.string().trim().nonempty({ message: "Username is required." }),
+  role: z.string().trim().nonempty({ message: "Role is required." }),
 });
 
 const loginSchema = z.object({
@@ -33,8 +33,16 @@ const goalSchema = z.object({
 });
 
 const relaxationSchema = z.object({
-  message: z.string().trim().nonempty({ message: "Message is required." }),
+  message: z
+    .string()
+    .trim()
+    .nonempty({ message: "Message is required." })
+    .max(200, { message: "Message must be less than 200 characters." }),
   videoUrl: z.string().trim().nonempty({ message: "Video url is required." }),
+});
+
+const commentSchema = z.object({
+  body: z.string().trim().nonempty({ message: "Body is required." }),
 });
 
 export {
@@ -43,4 +51,5 @@ export {
   feelingSchema,
   goalSchema,
   relaxationSchema,
+  commentSchema,
 };

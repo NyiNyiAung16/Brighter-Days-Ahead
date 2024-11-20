@@ -1,30 +1,46 @@
 import { collection, doc } from "firebase/firestore"
 import { db } from "../firebaseConfig"
-import { get, add, update, destroy } from './firestore'
+import { getAll, add, update, destroy } from './firestore'
 
 
 const relaxationCollection = collection(db,'relaxation');
 
 
 const getRelaxation = async () => {
-    await get(relaxationCollection);
+    try {
+        return await getAll(relaxationCollection);
+    } catch (error) {
+       throw new Error(error?.message || "server error");
+    }
 }
 
 
 const setRelax = async ({ message, videoUrl, user }) => {
-    await add({ message, videoUrl, user },relaxationCollection);
+    try {
+        return await add({ message, videoUrl, user },relaxationCollection);
+    } catch (error) {
+       throw new Error(error?.message || "server error");
+    }
 }
 
 
-const updateRelax = async ( id ) => {
-    const docRef = doc(db,'relaxation',id);
-    await update(docRef);
+const updateRelax = async ( id, data ) => {
+    try {
+        const docRef = doc(db,'relaxation',id);
+        return await update(docRef, data);
+    } catch (error) {
+       throw new Error(error?.message || "server error");
+    }
 }
 
 
 const deleteRelax = async (id) => {
-    const docRef = doc(db,'relaxation',id);
-    await destroy(docRef);
+    try {
+        const docRef = doc(db,'relaxation',id);
+        return await destroy(docRef);
+    } catch (error) {
+       throw new Error(error?.message || "server error");
+    }
 }
 
 

@@ -1,38 +1,42 @@
-import { uploadBytes, getDownloadURL, deleteObject, ref } from 'firebase/storage'
-import { storage } from '../firebaseConfig';
+import axios from "axios";
+import { collection } from "firebase/firestore";
+import { db } from '../firebaseConfig';
+import { add, getAll } from '../helpers/firestore'
 
+const upload_preset = import.meta.env.VITE_UPLOAD_PRESET_NAME;
+const cloud_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
-const storageRef = ref(storage,'gallery');
+const uploadUrl = `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`;
 
-const addPhoto = async (file) => {
+const galleryCollection = collection(db,'gallery');
+
+const getPhotos = async () => {
     try {
-        const photoData = await uploadBytes(storageRef,file);
-        return photoData;
+       return await getAll(galleryCollection);
     } catch (error) {
-        console.log(error);
+        throw new Error(error?.message || "server error");
     }
 }
 
 
-const getPhoto = async (filename) => {
+const storePhoto = async (file, user) => {
     try {
-        //get photo
-        const photoRef = ref(storage,`gallery/${filename}`);
-        const url = await getDownloadURL(photoRef);
-        return url;
-    } catch (error) {
-        console.log(error);
-    }
-}
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', upload_preset);
+    
+        const res = await axios.post(uploadUrl, formData);
+        const data = {
+            url: res.data.url,
+            publicId: res.data.public_id,
+            filename: res.data.display_name,
+            user,
+        }
 
-
-const deletePhoto = async (filename) => {
-    try {
-        //delete
-        const photoRef = ref(storage,`gallery/${filename}`);
-        await deleteObject(photoRef);
+        let docRef = await add(data,galleryCollection);
+        return { ...data, id: docRef.id };
     } catch (error) {
-        console.log(error);
+        throw new Error(error?.message || "server error");
     }
 }
 
@@ -77,4 +81,4 @@ const previewPhoto = (e) => {
 
 
 
-export { addPhoto, getPhoto, deletePhoto, previewPhoto };
+export { previewPhoto, storePhoto, getPhotos };

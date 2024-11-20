@@ -1,32 +1,73 @@
-import { collection, doc } from "firebase/firestore"
+import { collection, doc} from "firebase/firestore"
 import { db } from "../firebaseConfig"
-import { get, add, update, destroy } from './firestore'
-
+import { getAll, add, update, destroy, getDetail, getTotalCount, getPaginate } from './firestore'
 
 const feelingsCollection = collection(db,'feelings');
 
+const limit = 3;
+
+const getFeelingsCount = async () => {
+    try {
+        return await getTotalCount(feelingsCollection,limit);
+    } catch (error) {
+        throw new Error(error?.message || "server error");
+    }
+}
+
+const getPaginatedFeelings = async () => {
+    try {
+        return await getPaginate(feelingsCollection,limit);
+    } catch (error) {
+        throw new Error(error?.message || "server error");
+    }
+}
 
 const getFeelings = async () => {
-    await get(feelingsCollection);
+    try {
+        return await getAll(feelingsCollection);
+    } catch (error) {
+        throw new Error(error?.message || "server error");
+    }
+}
+
+
+const getFeeling = async (id) => {
+    try {
+        return await getDetail(doc(db,'feelings',id));
+    } catch (error) {
+        throw new Error(error?.message || "server error");
+    }
 }
 
 
 const setFeeling = async ({ text, user}) => {
-    await add({ text, user },feelingsCollection);
+    try {
+        return await add({ text, user},feelingsCollection);
+    } catch (error) {
+        throw new Error(error?.message || "server error");
+    }
 }
 
 
-const updateFeeling = async ( id ) => {
-    const docRef = doc(db,'feelings',id);
-    await update(docRef);
+const updateFeeling = async ( id, data ) => {
+    try {
+        const docRef = doc(db,'feelings',id);
+        return await update(docRef,data);
+    } catch (error) {
+        throw new Error(error?.message || "server error");
+    }
 }
 
 
 const deleteFeeling = async (id) => {
-    const docRef = doc(db,'feelings',id);
-    await destroy(docRef);
+    try {
+        const docRef = doc(db,'feelings',id);
+        return await destroy(docRef);
+    } catch (error) {
+        throw new Error(error?.message || "server error");
+    }
 }
 
 
-export { getFeelings, setFeeling, updateFeeling, deleteFeeling };
+export { getFeelings ,getFeelingsCount, getPaginatedFeelings, getFeeling, setFeeling, updateFeeling, deleteFeeling };
 

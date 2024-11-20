@@ -2,7 +2,7 @@
 export default function BaseModal({ children,title, id }) {
   return (
     <>
-      <dialog id={id} className="modal">
+      <dialog id={id} className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
             <h3 className="text-3xl text-center font-semibold text-gray-100 mb-5">
               {title}

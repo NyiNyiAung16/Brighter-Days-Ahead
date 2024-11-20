@@ -1,34 +1,62 @@
 import { useState } from "react";
 import TrashIcon from "./TrashIcon";
+import { deleteGoal, updateGoal } from "../helpers/goals";
+import useGoal from "../helpers/useGoal";
+import { toast } from "react-toastify";
+import { useAuth } from "../helpers/useAuth";
 
-export default function Goal({ goal, setGoals }) {
-    const [showUpdate, setShowUpdate] = useState(false);
-    const [body, setBody] = useState(goal.body || "");
-  
-    const handleOnChange = (completed) => {
-      setGoals((pre) =>
-        pre.map((preGoal) => {
-          if (preGoal === goal) {
-            preGoal.completed = completed;
-            return preGoal;
-          }
-          return preGoal;
-        })
-      );
-    };
-  
-    const handleTrash = (e) => {
-      e.preventDefault();
-  
-      setGoals((prevGoals) =>
+export default function Goal({ goal }) {
+  const [showUpdate, setShowUpdate] = useState(false);
+  const [body, setBody] = useState(goal.body || "");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const goalContext = useGoal();
+  const { currentUser } = useAuth();
+  const userId = currentUser?.uid;
+
+  const handleOnChange = async (completed) => {
+    try {
+      const updatedGoals = goalContext?.goals.map((preGoal) => {
+        if (preGoal === goal) {
+          return { ...preGoal, completed };
+        }
+        return preGoal;
+      });
+
+      goalContext?.setGoals(updatedGoals);
+      await updateGoal(goal.id, { ...goal, completed });
+    } catch (error) {
+      toast.error(error.message, { autoClose: 2000 });
+    }
+  };
+
+  const handleTrash = async (e) => {
+    e.stopPropagation();
+
+    if (goal.user.id !== userId && isProcessing) return;
+    setIsProcessing(true);
+
+    try {
+      goalContext?.setGoals((prevGoals) =>
         prevGoals.filter((prevGoal) => prevGoal.id !== goal.id)
       );
-    };
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-  
-      setGoals((prevGoals) =>
+
+      await deleteGoal(goal.id);
+      toast.success("Goal deleted successfully.", { autoClose: 2000 });
+    } catch (error) {
+      toast.error(error.message, { autoClose: 2000 });
+    }
+  };
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+
+    if (goal.user.id !== userId) return;
+
+    try {
+      await updateGoal(goal.id, { ...goal, body });
+
+      goalContext?.setGoals((prevGoals) =>
         prevGoals.map((prevGoal) => {
           if (prevGoal.id === goal.id) {
             prevGoal.body = body;
@@ -37,56 +65,56 @@ export default function Goal({ goal, setGoals }) {
           return prevGoal;
         })
       );
+      toast.success("Goal updated successfully.", { autoClose: 2000 });
       setShowUpdate(false);
-    };
-  
-    const handleDoubleClick = () => {
-      setShowUpdate(true);
-    };
-  
-    return (
-      <div className="flex items-center border-b border-info relative group">
-        <div className="p-3">
-          <input
-            type="checkbox"
-            checked={goal.completed}
-            onChange={() => handleOnChange(!goal.completed)}
-            className="w-4 h-4 "
-          />
-        </div>
-  
-        {!showUpdate && (
-            <>
-                <p
-                    className={`border-l border-info p-3 ${
-                    goal.completed ? "line-through" : ""
-                    }`}
-                    onDoubleClick={handleDoubleClick}
-                >
-                    {goal.body}
-                </p>
-                <TrashIcon
-                    className={
-                        "hidden absolute right-4 cursor-pointer hover:scale-105 duration-100 group-hover:block"
-                    }
-                    onClick={handleTrash}
-                />
-            </>
-        )}
-  
-        {showUpdate && (
-          <form className="w-full" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={body}
-              onInput={(e) => setBody(e.target.value)}
-              className="w-full border-l bg-gray-50 bg-opacity-30 outline-none border-info p-3"
-            />
-          </form>
-        )}
-  
-        
+    } catch (error) {
+      toast.error(error.message, { autoClose: 2000 });
+    }
+  };
+
+  const handleDoubleClick = (e) => {
+    if (goal.user.id !== userId) return;
+    setShowUpdate(true);
+  };
+
+  return (
+    <div className="flex items-center bg-gray-50 bg-opacity-30 rounded relative group hover:shadow-sm">
+      <div className="p-3">
+        <input
+          type="checkbox"
+          checked={goal.completed}
+          onChange={() => handleOnChange(!goal.completed)}
+          className="w-4 h-4 checkbox checkbox-info"
+        />
       </div>
-    );
-  }
-  
+
+      {!showUpdate && (
+        <div onDoubleClick={handleDoubleClick} className="relative w-full">
+          <p className={`${goal.completed ? "line-through" : ""}`}>
+            {goal.body}
+          </p>
+          {goal.user.id === userId && (
+            <TrashIcon
+              className={
+                "hidden absolute top-0 right-4 cursor-pointer hover:scale-105 duration-100 group-hover:block"
+              }
+              onClick={handleTrash}
+            />
+          )}
+        </div>
+      )}
+
+      {showUpdate && (
+        <form className="w-full" onSubmit={handleEdit}>
+          <input
+            type="text"
+            value={body}
+            onInput={(e) => setBody(e.target.value)}
+            onBlur={() => setShowUpdate(false)}
+            className="w-full bg-gray-50 bg-opacity-30 outline-none p-3"
+          />
+        </form>
+      )}
+    </div>
+  );
+}

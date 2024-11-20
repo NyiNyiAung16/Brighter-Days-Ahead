@@ -1,3 +1,3 @@
-export default function Spinner() {
-    return <span className="loading loading-dots loading-md"></span>
+export default function Spinner({ size = 'md', className }) {
+    return <span className={`loading loading-dots ${size === 'md' ? 'loading-md' : 'loading-sm'} ${className ?? ''}`}></span>
 }

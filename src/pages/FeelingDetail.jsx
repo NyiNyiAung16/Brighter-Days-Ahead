@@ -1,44 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Feeling from "../components/Feeling";
-import CommentForm from "../components/Form";
+import CommentForm from "../components/CommentForm";
 import CommentLists from "../components/CommentLists";
+import { getFeeling } from "../helpers/feelings";
+import Spinner from "../components/Spinner";
+import { CommentProvider } from "../contexts/commentContext";
 
 export default function FeelingDetail() {
-  const [feelings, setFeelings] = useState([
-    { id: 1, text: "happy morning", username: "Mg Mg" },
-    { id: 2, text: "happy evening", username: "Aunt Aunt" },
-    { id: 3, text: "happy morning", username: "Su Su" },
-    { id: 4, text: "happy night", username: "Lin Lin" },
-    { id: 5, text: "happy morning", username: "Mg Mg" },
-  ]);
-
-  const [comments,setComments] = useState([
-    { id:1, body: 'sleep 5 minutes', feelingId: 1, username: "mgmg" },
-    { id:2, body: 'sleep 5 minutes', feelingId: 2, username: "auntaunt" },
-    { id:3, body: 'sleep 5 minutes', feelingId: 3, username: "susu" },
-    { id:4, body: 'sleep 5 minutes', feelingId: 4, username: "linlin" },
-    { id:5, body: 'sleep 5 minutes', feelingId: 5, username: "mgmg" },
-  ]);
+  const [feeling, setFeeling] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const params = useParams();
 
-  const feeling = feelings.find((feeling) => feeling.id === Number(params.id));
+  useEffect(() => {
+    const fetch = async () => {
+      setIsLoading(true);
+      let feelingData = await getFeeling(params.id);
+      setFeeling(feelingData);
+      setIsLoading(false);
+    };
+    fetch();
+  },[params]);
 
-  const onHandleSubmit = (body) => {
-    setComments((prevComments) => [{ id: prevComments.length + 1, body, feelingId: Number(params.id), username: 'mg mg' }, ...prevComments,]);
-  };
 
   return (
     <div className="min-h-screen">
       <Header />
-      <div className="max-w-xl mx-auto mt-10">
-        <Feeling feeling={feeling}/>
-        <div className="mt-10">
-          <CommentForm onHandleSubmit={onHandleSubmit} title={"Add Comment"} placeholder={"What are you thinking?"}/>
-          <CommentLists comments={comments}/>
-        </div>
+      <div className="max-w-xl mx-auto px-5 sm:px-0 mt-10">
+        {isLoading && <Spinner className="block mx-auto" />}
+        {!isLoading && <Feeling feeling={feeling}/>}
+        <CommentProvider>
+          <div className="mt-10">
+            <CommentForm feelingId={params.id}/>
+            <CommentLists/>
+          </div>
+        </CommentProvider>
       </div>
     </div>
   );

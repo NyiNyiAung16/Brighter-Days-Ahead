@@ -1,10 +1,10 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 import { useState } from "react";
 import { registerValidation } from "../helpers/validation";
 import { register } from "../helpers/auth";
-import useAuth from "../helpers/useAuth";
 import Spinner from "../components/Spinner";
+import { toast } from "react-toastify";
 
 export default function Register() {
   let [email, setEmail] = useState("");
@@ -14,37 +14,47 @@ export default function Register() {
   let [errors, setErrors] = useState(null);
   let [isLoading, setIsLoading] = useState(false);
 
-
-  const { userLoggedIn } = useAuth();
-
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const { errors, data } = registerValidation({ username, email, password, role });
+    try {
+      e.preventDefault();
+      setIsLoading(true);
+      const { errors, data } = registerValidation({
+        username,
+        email,
+        password,
+        role,
+      });
 
-    if(errors) {
-      setErrors(errors);
-      setTimeout(() => setErrors(null),2000);
-    } else {
+      if (errors) {
+        setErrors(errors);
+        clearErrors();
+        return;
+      }
+
       await register(data);
       resetForm();
+    } catch (error) {
+      toast.error(error.message, { autoClose: 2000 });
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    setIsLoading(false);
-  }
-
+  const clearErrors = () => {
+    setTimeout(() => {
+      setErrors(null);
+    }, 2000);
+  };
 
   const resetForm = () => {
-    setEmail('');
-    setPassword('');
-    setUsername('');
-    setRole('');
-  }
+    setEmail("");
+    setPassword("");
+    setUsername("");
+    setRole("");
+  };
 
   return (
     <>
-      {userLoggedIn && <Navigate to={'/'} replace={true}/>}
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Logo className="w-52 mx-auto" />
@@ -54,7 +64,12 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
+          <form
+            action="#"
+            method="POST"
+            className="space-y-6"
+            onSubmit={handleSubmit}
+          >
             <label className="input input-bordered flex items-center gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +88,11 @@ export default function Register() {
                 onInput={(e) => setEmail(e.target.value)}
               />
             </label>
-            { errors?.email && <span className="text-sm text-red-500">{errors.email.message}</span>}
+            {errors?.email && (
+              <span className="text-sm text-red-500">
+                {errors.email.message}
+              </span>
+            )}
 
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -92,7 +111,11 @@ export default function Register() {
                 onInput={(e) => setUsername(e.target.value)}
               />
             </label>
-            { errors?.username && <span className="text-sm text-red-500">{errors.username.message}</span>}
+            {errors?.username && (
+              <span className="text-sm text-red-500">
+                {errors.username.message}
+              </span>
+            )}
 
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -115,7 +138,11 @@ export default function Register() {
                 onInput={(e) => setPassword(e.target.value)}
               />
             </label>
-            { errors?.password && <span className="text-sm text-red-500">{errors.password.message}</span>}
+            {errors?.password && (
+              <span className="text-sm text-red-500">
+                {errors.password.message}
+              </span>
+            )}
 
             <select
               className="w-full select select-bordered text-gray-400"
@@ -123,15 +150,19 @@ export default function Register() {
               onChange={(e) => setRole(e.target.value)}
             >
               <option value="" disabled>
-                Choose a type
+                Choose a role
               </option>
-              <option value="1">Patience</option>
-              <option value="2">Encourge</option>
+              <option value="BS">Bright Star ( Patient )</option>
+              <option value="CB">Cheer Buddy ( Supporting Friend ) </option>
             </select>
-            { errors?.role && <span className="text-sm text-red-500">{errors.role.message}</span>}
+            {errors?.role && (
+              <span className="text-sm text-red-500">
+                {errors.role.message}
+              </span>
+            )}
 
             <div>
-              <button type="submit" className="w-full btn btn-primary">
+              <button type="submit" className="w-full btn btn-info">
                 {!isLoading && "Sign Up"}
                 {isLoading && <Spinner />}
               </button>
@@ -142,7 +173,7 @@ export default function Register() {
             If you already have an account?{" "}
             <Link
               to="/login"
-              className="font-semibold text-indigo-600 hover:text-indigo-500"
+              className="font-semibold text-info"
             >
               Login Here
             </Link>

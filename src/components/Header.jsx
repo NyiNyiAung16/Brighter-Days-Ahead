@@ -1,20 +1,25 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import { logout } from "../helpers/auth";
-import useAuth from '../helpers/useAuth'
+import {useAuth} from "../helpers/useAuth";
 import TellFeelingForm from "./TellFeelingForm";
 import UploadMemories from "./UploadMemories";
 import RelaxationForm from "./RelaxationForm";
+import Spinner from "./Spinner";
+import BaseModal from "./BaseModal";
+import { GalleryProvider } from "../contexts/galleryContext";
 
-function HeaderLinks() {
+function HeaderLinks({ userRole }) {
   return (
     <>
       <li>
         <NavLink to="/">Home</NavLink>
       </li>
-      <li>
-        <NavLink to="/goals">Goals</NavLink>
-      </li>
+      {userRole === "BS" && (
+        <li>
+          <NavLink to="/goals">Goals</NavLink>
+        </li>
+      )}
       <li>
         <NavLink to="/feelings">Feelings</NavLink>
       </li>
@@ -29,14 +34,14 @@ function HeaderLinks() {
 }
 
 export default function Header() {
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, currentUser } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    console.log('hit')
+    console.log("hit");
     await logout();
-    navigate('/login', { replace: true });
-  }
+    navigate("/login", { replace: true });
+  };
 
   return (
     <div className="navbar">
@@ -60,9 +65,9 @@ export default function Header() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 text-gray-200 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
-            <HeaderLinks />
+            <HeaderLinks userRole={currentUser?.role} />
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">
@@ -71,46 +76,74 @@ export default function Header() {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <HeaderLinks />
+          <HeaderLinks userRole={currentUser?.role}/>
         </ul>
       </div>
       <div className="navbar-end">
-        {!userLoggedIn && <Link to="/login" className="btn btn-outline btn-info">Login</Link>}
-        { userLoggedIn && <details className="dropdown dropdown-end">
-          <summary className="btn btn-outline btn-info m-1">
-            Nyi Nyi Aung
-          </summary>
-          <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] p-2 w-52 shadow">
-            <li>
-              <a className="px-3 py-2" href="#" onClick={() => document.getElementById("tellFeelingModal").showModal()}>Tell Feeling</a>
-            </li>
-            <li>
-              <a className="px-3 py-2" href="#" onClick={() => document.getElementById("uploadMemoriesModal").showModal()}>Upload Memories Photo</a>
-            </li>
-            <li>
-              <a className="px-3 py-2" href="#" onClick={() => document.getElementById("relaxationModal").showModal()}>Set Relaxation</a>
-            </li>
-            <li onClick={handleLogout}>
-              <a className="px-3 py-2">Logout</a>
-            </li>
-          </ul>
-        </details>}
+        {!userLoggedIn && (
+          <Link to="/login" className="btn btn-outline btn-info">
+            Login
+          </Link>
+        )}
+        {userLoggedIn && (
+          <div className="dropdown dropdown-end">
+            <summary tabIndex={0} role="button" className="btn btn-outline btn-info m-1">
+              {currentUser?.username || <Spinner size="sm" />}
+            </summary>
+            <ul tabIndex={0} className="menu dropdown-content bg-base-100 text-gray-200 rounded-box z-[1] p-2 w-52 shadow">
+              <li>
+                <a
+                  className="px-3 py-2"
+                  href="#"
+                  onClick={() => document.getElementById("tellFeelingModal").showModal()}
+                >
+                  Tell Feeling
+                </a>
+              </li>
+              <li>
+                <a
+                  className="px-3 py-2"
+                  href="#"
+                  onClick={() => document.getElementById("relaxationModal").showModal()}
+                >
+                  Set Relaxation
+                </a>
+              </li>
+              <li>
+                <a
+                  className="px-3 py-2"
+                  href="#"
+                  onClick={() => document.getElementById("uploadMemoriesModal").showModal()}
+                >
+                  Upload Memories Photo
+                </a>
+              </li>
+              <li onClick={handleLogout}>
+                <a className="px-3 py-2">Logout</a>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
-      <Modals/>
+      <Modals />
     </div>
   );
 }
 
-
-
-
-
 function Modals() {
   return (
     <>
-      <TellFeelingForm/>
-      <UploadMemories/>
-      <RelaxationForm/>
+      <BaseModal id="tellFeelingModal" title="Tell Feeling">
+        <TellFeelingForm />
+      </BaseModal>
+      <GalleryProvider>
+        <BaseModal id="uploadMemoriesModal" title="Upload Memories Photo">
+          <UploadMemories />
+        </BaseModal>
+      </GalleryProvider>
+      <BaseModal id="relaxationModal" title="Set Relaxation">
+        <RelaxationForm />
+      </BaseModal>
     </>
-  )
+  );
 }
