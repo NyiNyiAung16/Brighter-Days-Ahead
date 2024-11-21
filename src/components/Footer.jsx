@@ -1,8 +1,9 @@
 import FacebookIcon from "./FacebookIcon";
-import InstagramIcon from "./InstagramIcon";
+import LinkedinIcon from "./LinkedinIcon";
 import YoutubeIcon from "./YoutubeIcon";
 import GithubIcon from "./GithubIcon";
 import Logo from "./Logo";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -16,18 +17,18 @@ export default function Footer() {
       </aside>
       <nav>
         <div className="grid grid-flow-col gap-4">
-          <a>
+          <Link to="https://www.facebook.com/nyinyiaung.nyinyiaung.75054689" target="_blank" className="hover:scale-105 duration-150">
             <FacebookIcon className="w-10"/>
-          </a>
-          <a>
-            <InstagramIcon className="w-10"/>
-          </a>
-          <a>
+          </Link>
+          <Link to="https://www.linkedin.com/in/nyi-nyi-36500b264/" target="_blank" className="hover:scale-105 duration-150">
+            <LinkedinIcon className="w-10"/>
+          </Link>
+          <Link to="https://www.youtube.com/@NyiNyi-qe6gs" target="_blank" className="hover:scale-105 duration-150">
             <YoutubeIcon className="w-10"/>
-          </a>
-          <a>
+          </Link>
+          <Link to="https://github.com/NyiNyiAung16" target="_blank" className="hover:scale-105 duration-150">
             <GithubIcon className="w-10"/>
-          </a>
+          </Link>
         </div>
       </nav>
     </footer>

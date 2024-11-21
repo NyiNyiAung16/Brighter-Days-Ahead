@@ -1,49 +1,60 @@
 import { useState } from "react";
-import TrashIcon from "../components/TrashIcon";
+import Actions from "../components/Actions";
 import useComment from "../helpers/useComment";
 import { deleteComment, updateComment } from "../helpers/comments";
+import { useUser } from "../helpers/useAuth";
+import { toast } from "react-toastify";
 
 export default function Comment({ comment }) {
   const [show, setShow] = useState(false);
   const [body, setBody] = useState(comment.body || "");
 
   const commentContext = useComment();
+  const user = useUser();
 
   const handleUpdateComment = async (e) => {
     e.preventDefault();
+    try {
+      if (comment.user.id !== user.id) return;
 
-    await updateComment(comment.id, { body });
-
-    commentContext?.setComments((prevComments) =>
-      prevComments.map((prevComment) =>
-        prevComment.id === comment.id ? { ...prevComment, body } : prevComment
-      )
-    );
-
-    setShow(false);
+      await updateComment(comment.id, { body });
+      commentContext?.setComments((prevComments) =>
+        prevComments.map((prevComment) =>
+          prevComment.id === comment.id ? { ...prevComment, body } : prevComment
+        )
+      );
+    } catch (error) {
+      toast.error(error.message, { autoClose: 2000 });
+    } finally {
+      setShow(false);
+    }
   };
 
-
   const handleDelete = async (comment) => {
-    await deleteComment(comment.id);
+    try {
+      if (comment.user.id !== user.id) return;
 
-    commentContext?.setComments((prevComments) =>
-      prevComments.filter((prevComment) => prevComment.id !== comment.id)
-    );
-  }
+      await deleteComment(comment.id);
+      commentContext?.setComments((prevComments) =>
+        prevComments.filter((prevComment) => prevComment.id !== comment.id)
+      );
+    } catch (error) {
+      toast.error(error.message, { autoClose: 2000 });
+    }
+  };
 
   return (
-    <div className="bg-gray-50 bg-opacity-30 p-3 rounded space-y-3 group">
+    <div className="bg-gray-50 bg-opacity-30 p-3 rounded space-y-3 relative group">
       <div className="flex items-center justify-between relative">
         <h3 className="font-semibold capitalize">{comment.user.name}</h3>
-        <TrashIcon
-          className={
-            "hidden absolute right-0 hover:scale-105 duration-200 cursor-pointer group-hover:block"
-          }
-          onClick={() => handleDelete(comment)}
-        />
+        {comment.user.id === user.id && (
+          <Actions
+            onDelete={() => handleDelete(comment)}
+            onEdit={() => setShow(true)}
+          />
+        )}
       </div>
-      {!show && <p onDoubleClick={() => setShow(true)}>{comment.body}</p>}
+      {!show && <p>{comment.body}</p>}
 
       {show && (
         <form className="w-full" onSubmit={handleUpdateComment}>
@@ -51,7 +62,7 @@ export default function Comment({ comment }) {
             type="text"
             value={body}
             onInput={(e) => setBody(e.target.value)}
-            onBlur={(e) => setShow(false)}
+            onBlur={() => setShow(false)}
             className="w-full bg-gray-50 bg-opacity-30 outline-none border-info p-3"
           />
         </form>

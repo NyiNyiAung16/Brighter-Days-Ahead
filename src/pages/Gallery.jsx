@@ -8,6 +8,7 @@ export default function Gallery() {
   const galleryContext = useGallery();
   setTitle("Memories");
 
+
   return (
     <div className="min-h-screen">
       <Header />

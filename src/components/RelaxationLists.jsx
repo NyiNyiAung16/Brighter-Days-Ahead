@@ -16,15 +16,17 @@ export default function RelaxationLists({ relaxations }) {
   const userId = currentUser?.uid;
 
   const handleDelete = async (relaxation) => {
-    if( relaxation.user.id !== userId) return;
+    if (relaxation.user.id !== userId) return;
 
     try {
       await deleteRelax(relaxation.id);
-      relaxationContext?.setRelaxations((prevRelax) => prevRelax.filter((relax) => relax.id !== relaxation.id));
+      relaxationContext?.setRelaxations((prevRelax) =>
+        prevRelax.filter((relax) => relax.id !== relaxation.id)
+      );
     } catch (error) {
       toast.error(error.message, { autoClose: 2000 });
     }
-  }
+  };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 px-10">
@@ -58,23 +60,23 @@ export default function RelaxationLists({ relaxations }) {
                 </a>
               </p>
 
-              { relaxation.user.id === userId && <Actions
-                onDelete={() => handleDelete(relaxation)}
-                onEdit={() =>
-                  {
+              {relaxation.user.id === userId && (
+                <Actions
+                  onDelete={() => handleDelete(relaxation)}
+                  onEdit={() => {
                     document.getElementById("editRelaxationModal").showModal();
                     setRelaxation(relaxation);
-                  }
-                }
-              />}
-
+                  }}
+                  className="p-3"
+                />
+              )}
             </div>
           </div>
         ))}
 
-        <BaseModal id="editRelaxationModal" title="Edit Relaxation">
-          <RelaxationForm relaxation={relaxation} />
-        </BaseModal>
+      <BaseModal id="editRelaxationModal" title="Edit Relaxation">
+        <RelaxationForm relaxation={relaxation} />
+      </BaseModal>
     </div>
   );
 }

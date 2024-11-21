@@ -96,7 +96,7 @@ export default function Goal({ goal }) {
             {goal.body}
           </p>
           {goal.user.id === userId && (
-            <div className="dropdown dropdown-top hidden absolute top-0 right-4 cursor-pointer hover:scale-105 duration-100 group-hover:block">
+            <div className="dropdown absolute top-0 right-4 cursor-pointer">
               <div tabIndex={0} role="button">
                 <DotsIcon />
               </div>

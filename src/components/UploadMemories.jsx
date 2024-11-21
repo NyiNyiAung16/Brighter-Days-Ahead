@@ -38,9 +38,10 @@ export default function UploadMemories() {
         return;
       }
       let data = await storePhoto(file, user);
-      if(data) {
-        galleryContext?.setGallery((prevGallery) => [data, ...prevGallery]);
+      if(data && galleryContext) {
+        galleryContext.setGallery((prev) => [data, ...prev]);
       }
+      document.getElementById('uploadMemoriesModal').close();
       toast.success("Photo uploaded successfully.", { autoClose: 2000 });
       resetForm();
     } catch (error) {

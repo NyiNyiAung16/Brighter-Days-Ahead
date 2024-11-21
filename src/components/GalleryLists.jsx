@@ -19,7 +19,7 @@ export default function GalleryLists({ gallery }) {
         {gallery.map((photo) => (
           <div
             key={photo.id}
-            className="relative overflow-hidden rounded-lg shadow-md group "
+            className="relative overflow-hidden rounded-lg shadow-md group"
           >
             <Photo url={photo.url} />
             <div
