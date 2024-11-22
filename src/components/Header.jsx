@@ -136,11 +136,9 @@ function Modals() {
       <BaseModal id="tellFeelingModal" title="Tell Feeling">
         <TellFeelingForm />
       </BaseModal>
-      <GalleryProvider>
-        <BaseModal id="uploadMemoriesModal" title="Upload Memories Photo">
-          <UploadMemories />
-        </BaseModal>
-      </GalleryProvider>
+      <BaseModal id="uploadMemoriesModal" title="Upload Memories Photo">
+        <UploadMemories />
+      </BaseModal>
       <BaseModal id="relaxationModal" title="Set Relaxation">
         <RelaxationForm />
       </BaseModal>
