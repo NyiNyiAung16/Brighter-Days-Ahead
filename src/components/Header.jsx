@@ -7,7 +7,6 @@ import UploadMemories from "./UploadMemories";
 import RelaxationForm from "./RelaxationForm";
 import Spinner from "./Spinner";
 import BaseModal from "./BaseModal";
-import { GalleryProvider } from "../contexts/galleryContext";
 
 function HeaderLinks({ userRole }) {
   return (
@@ -38,7 +37,6 @@ export default function Header() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    console.log("hit");
     await logout();
     navigate("/login", { replace: true });
   };

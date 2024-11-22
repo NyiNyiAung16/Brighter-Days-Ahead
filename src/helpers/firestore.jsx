@@ -29,6 +29,24 @@ const getAll = async (collectionRef) => {
   }
 };
 
+const getRandomDocument = async (collectionRef) => {
+  try {
+    const snapshot = await getDocs(collectionRef);
+    const docs = snapshot.docs;
+  
+    if (docs.length === 0) {
+      throw new Error('No documents found');
+    }
+  
+    const randomDoc = docs[Math.floor(Math.random() * docs.length)];
+  
+    return randomDoc.data();
+  } catch (error) {
+    throw new Error(error?.message || "server error");
+  }
+};
+
+
 const getPaginate = async (collectionRef, pageSize) => {
   try {
     //get goals
@@ -110,4 +128,4 @@ const destroy = async (docRef) => {
   }
 };
 
-export { getAll, getPaginate, getTotalCount, getDetail, add, update, destroy };
+export { getAll, getRandomDocument, getPaginate, getTotalCount, getDetail, add, update, destroy };
