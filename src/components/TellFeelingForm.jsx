@@ -61,7 +61,6 @@ export default function TellFeelingForm({ feeling }) {
       toast.error(error.message, { autoClose: 2000 });
     } finally {
       setIsLoading(false);
-      document.getElementById('editFeelingModal').close();
     }
   };
 

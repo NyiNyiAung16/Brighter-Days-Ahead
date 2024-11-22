@@ -20,7 +20,7 @@ const register = async ({ username, email, password, role }) => {
     await createUserWithEmailAndPassword(auth, email, password);
     const user = auth.currentUser;
     if (user) {
-      await setDoc(doc(db, "users", user.uid), { username, email, role });
+      await setDoc(doc(db, "users", user.uid), { username, email, role, lastSupriseDate : null });
     }
   } catch (error) {
     throw new Error(handleAuthError(error.code));

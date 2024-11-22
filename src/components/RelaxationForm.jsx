@@ -73,7 +73,6 @@ export default function RelaxationForm({ relaxation }) {
       toast.error(error.message, { autoClose: 2000 });
     } finally {
       setIsLoading(false);
-      document.getElementById("editRelaxationModal").close();
     }
   };
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Banner from "./components/Banner";
-import MotivateMessageModal from "./components/MotivateMessageModal";
+import SupriseBoxModal from "./components/SupriseBoxModal";
 import PreviewMessages from "./components/PreviewMessages";
 import RelaxationLists from "./components/RelaxationLists";
 import Footer from "./components/Footer";
@@ -49,7 +49,7 @@ function App() {
           <div className="container mx-auto py-8 bg-gray-50 bg-opacity-10">
             <PreviewMessages feelings={feelings.slice(0, 3)} />
           </div>
-          <MotivateMessageModal />
+          <SupriseBoxModal />
           <div className="container mx-auto py-8 ">
             <h1 className="title">Relaxation Corner</h1>
             {relaxations && (
